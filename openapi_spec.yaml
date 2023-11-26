@@ -1,0 +1,77 @@
+openapi: "3.0.3"
+info:
+  title: "langchain_exp API"
+  description: "langchain_exp API"
+  version: "1.0.0"
+servers:
+  - url: "https://localhost:8080"
+paths:
+  /v0.1/chat-with-model:
+    post:
+      summary: "POST v0.1/chat-with-model"
+      operationId: "chatWithModel"
+      description: Chat with an LLM.
+      parameters:
+        - name: "systemMessage"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: The system message with a description of how you want the LLM to act
+        - name: "userMessage"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: The user message containing the question
+        - name: "modelId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+          description: The id of the HuggingFace model to use. If null, this will default to OpenAI's 'gpt-3.5-turbo' model.
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /v0.1/chat-with-docs:
+    post:
+      summary: "POST v0.1/chat-with-docs"
+      operationId: "chatWithDocs"
+      description: Interact with an LLM using your provided document as context via an embedding.
+      parameters:
+        - name: "question"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: The question to ask the LLM
+        - name: "fileName"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+          description: The name of the file you'd like to use as an embedding
+        - name: "modelId"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+          description: The id of the HuggingFace model to use. If null, this will default to the OpenAI 'gpt-3.5-turbo' model
+        - name: "maxResults"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            default: "3"
+          description: The maximum number of text segments retrieved from the embedding store
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
